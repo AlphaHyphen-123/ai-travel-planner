@@ -34,11 +34,11 @@ Return ONLY JSON:
       "activities": ["Visit place", "Explore market"]
     }
   ],
-  "budget": {
-    "flightCost": 0,
-    "hotelPerDay": 0,
-    "foodPerDay": 0,
-    "activityPerDay": 0
+  "dailyCosts": {
+    "hotelPerDay": number,
+    "foodPerDay": number,
+    "activityPerDay": number,
+    "transportPerDay": number
   },
   "hotels": ["Hotel A", "Hotel B"]
 }
@@ -47,7 +47,9 @@ IMPORTANT:
 - All values must be NUMBERS only
 - No currency symbols
 - No text explanation
+- Estimates should be REALISTIC for the location and budget level
 `;
+
 
     const completion = await client.chat.completions.create({
       model: "deepseek-ai/deepseek-v4-flash",

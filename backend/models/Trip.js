@@ -42,14 +42,19 @@ const tripSchema = new mongoose.Schema(
       },
     ],
 
+    // ✅ NEW (WEATHER FEATURE)
+    weather: {
+      type: Array,
+      default: [],
+    },
+
     // ✅ FIXED (STRUCTURED OBJECT)
     estimatedBudget: {
-      flights: Number,
-      accommodation: Number,
+      hotel: Number,
       food: Number,
       activities: Number,
+      transport: Number,
       total: Number,
-      dailyCost: Number,
     },
 
     // ✅ NEW (SAVE FEATURE)
@@ -66,5 +71,6 @@ const tripSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 
 module.exports = mongoose.model("Trip", tripSchema);

@@ -17,7 +17,13 @@ import {
   Hotel,
   AlertCircle,
   RefreshCw,
+  Sun,
+  CloudRain,
+  Snowflake,
+  Cloud,
+  Thermometer,
 } from "lucide-react";
+
 
 function TripDetails() {
   const { id } = useParams();
@@ -368,12 +374,8 @@ function TripDetails() {
 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>Flights</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.flights)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Accommodation</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.accommodation)}</span>
+                    <span>Hotels</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.hotel)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Food</span>
@@ -382,6 +384,10 @@ function TripDetails() {
                   <div className="flex justify-between">
                     <span>Activities</span>
                     <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.activities)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Transport</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.transport)}</span>
                   </div>
 
                   <div className="pt-3 border-t mt-2 flex justify-between font-bold">
@@ -393,6 +399,44 @@ function TripDetails() {
                 </div>
               </div>
             )}
+
+            {/* Weather Forecast */}
+            {trip.weather && trip.weather.length > 0 && (
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <h3 className="font-bold text-slate-900 mb-5 flex items-center gap-2">
+                  <Sun className="w-5 h-5 text-amber-500" />
+                  Weather Forecast
+                </h3>
+                <div className="space-y-4">
+                  {trip.weather.map((day, index) => {
+                    const condition = day.day.condition.text.toLowerCase();
+                    let Icon = Cloud;
+                    if (condition.includes("sun") || condition.includes("clear")) Icon = Sun;
+                    else if (condition.includes("rain") || condition.includes("drizzle")) Icon = CloudRain;
+                    else if (condition.includes("snow")) Icon = Snowflake;
+
+                    return (
+                      <div key={index} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <Icon className="w-5 h-5 text-indigo-500" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-slate-700">Day {index + 1}</p>
+                            <p className="text-xs text-slate-500 capitalize">{day.day.condition.text}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 text-indigo-600 font-bold">
+                          <Thermometer className="w-3.5 h-3.5 opacity-50" />
+                          {Math.round(day.day.avgtemp_c)}°C
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
 
             {/* Hotel Suggestions */}
             {trip.hotels && trip.hotels.length > 0 && (

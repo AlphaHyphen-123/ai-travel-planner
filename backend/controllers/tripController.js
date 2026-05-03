@@ -45,37 +45,40 @@ exports.createTrip = async (req, res) => {
     };
 
     let budget;
+    const daily = aiResponse.dailyCosts || {};
 
-    if (aiResponse.budget && typeof aiResponse.budget === "object") {
-      const flightCost = cleanNumber(aiResponse.budget.flightCost);
-      const hotelPerDay = cleanNumber(aiResponse.budget.hotelPerDay);
-      const foodPerDay = cleanNumber(aiResponse.budget.foodPerDay);
-      const activityPerDay = cleanNumber(aiResponse.budget.activityPerDay);
+    const hotelPerDay = cleanNumber(daily.hotelPerDay);
+    const foodPerDay = cleanNumber(daily.foodPerDay);
+    const activityPerDay = cleanNumber(daily.activityPerDay);
+    const transportPerDay = cleanNumber(daily.transportPerDay);
 
-      const accommodation = hotelPerDay * days;
-      const food = foodPerDay * days;
-      const activities = activityPerDay * days;
+    const totalHotel = hotelPerDay * days;
+    const totalFood = foodPerDay * days;
+    const totalActivities = activityPerDay * days;
+    const totalTransport = transportPerDay * days;
 
-      const total =
-        flightCost + accommodation + food + activities;
+    const total = totalHotel + totalFood + totalActivities + totalTransport;
 
+    if (total > 0) {
       budget = {
-        flights: flightCost,
-        accommodation,
-        food,
-        activities,
+        hotel: totalHotel,
+        food: totalFood,
+        activities: totalActivities,
+        transport: totalTransport,
         total,
-        dailyCost: Math.floor(total / days),
       };
-
-      // 🔥 fallback if LLM fails
-      if (!total || total === 0) {
-        budget = calculateBudget(days, budgetType);
-      }
-
     } else {
-      budget = calculateBudget(days, budgetType);
+      // Fallback to legacy calculator if AI fails
+      const fallback = calculateBudget(days, budgetType);
+      budget = {
+        hotel: fallback.accommodation,
+        food: fallback.food,
+        activities: fallback.activities,
+        transport: Math.floor(fallback.total * 0.1), // Estimate transport as 10%
+        total: fallback.total,
+      };
     }
+
 
     // =========================
     // ✅ FIX 3: HOTELS SAFE
@@ -97,10 +100,12 @@ exports.createTrip = async (req, res) => {
       budgetType,
       interests,
       itinerary,
+      weather: weatherData, // ✅ SAVE WEATHER
       estimatedBudget: budget,
       hotels,
-      saved: false, // 🔥 NEW FIELD
+      saved: false,
     });
+
 
     res.status(201).json(trip);
   } catch (error) {
