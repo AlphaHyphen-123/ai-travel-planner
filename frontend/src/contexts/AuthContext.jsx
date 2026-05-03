@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("token");
     localStorage.removeItem("lastActivity");
     setUser(null);
-    window.location.href = "/";
+    window.location.href = "/login";
   };
 
   const login = async (token) => {

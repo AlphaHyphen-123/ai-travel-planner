@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+//import { AuthContext } from "../contexts/AuthContext";
 import { registerUser } from "../services/api";
 import bgImg from "../assets/bgimg.jpg"; // ✅ ADD THIS
 import logo from "../assets/logo.webp"
@@ -15,7 +15,7 @@ function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login } = useContext(AuthContext);
+  //const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,32 +23,32 @@ function Register() {
     setForm({ ...form, [name]: value });
   };
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
-    setLoading(true);
+  setError("");
+  setLoading(true);
 
-    try {
-      const normalizedForm = {
-        ...form,
-        email: form.email.trim().toLowerCase(),
-        name: form.name?.trim(),
-      };
+  try {
+    const normalizedForm = {
+      ...form,
+      email: form.email.trim().toLowerCase(),
+      name: form.name?.trim(),
+    };
 
-      await registerUser(normalizedForm);
+    await registerUser(normalizedForm);
 
-      navigate("/login");
+    navigate("/login");
 
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        "Registration failed. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  } catch (err) {
+    setError(
+      err.response?.data?.message ||
+      "Registration failed. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+  
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row">
 
