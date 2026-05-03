@@ -35,11 +35,11 @@ function Register() {
         name: form.name?.trim(),
       };
 
-      await registerUser(normalizedForm);
+await registerUser(normalizedForm);
 
-      localStorage.removeItem("token");
+localStorage.clear();
 
-      navigate("/login");
+navigate("/login");
 
     } catch (err) {
       setError(
