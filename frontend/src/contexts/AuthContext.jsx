@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (token) => {
+    setLoading(true);
     localStorage.setItem("token", token);
     localStorage.setItem("lastActivity", Date.now().toString());
     try {
@@ -24,6 +25,8 @@ export function AuthProvider({ children }) {
     } catch (error) {
       const decoded = jwtDecode(token);
       setUser({ token, ...decoded });
+    } finally {
+      setLoading(false);
     }
   };
 
