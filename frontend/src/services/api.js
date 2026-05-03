@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080/api", // backend URL
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",
 });
 
 // Attach token in every request
@@ -71,3 +71,5 @@ export const regenerateDay = async (id, formData) => {
   const { data } = await API.post(`/trips/regenerate-day/${id}`, formData);
   return data;
 };
+
+export default API;
