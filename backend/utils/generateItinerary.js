@@ -1,6 +1,6 @@
 const OpenAI = require("openai");
 
-const generateItinerary = async ({ destination, days, interests, budgetType }) => {
+const generateItinerary = async ({ destination, days, interests, budgetType, weatherSummary }) => {
   try {
     const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey) {
@@ -11,12 +11,19 @@ const generateItinerary = async ({ destination, days, interests, budgetType }) =
       baseURL: "https://integrate.api.nvidia.com/v1",
       apiKey: apiKey,
     });
-
     const prompt = `
 Create a ${days}-day travel itinerary for ${destination}.
 
 Budget: ${budgetType}
 Interests: ${Array.isArray(interests) ? interests.join(", ") : interests}
+
+Weather Forecast Context:
+${weatherSummary || "No weather data available. Plan for typical seasonal weather."}
+
+Instructions:
+- If rainy, avoid outdoor activities. Suggest museums, cafes, shopping malls, aquariums for bad weather.
+- If sunny, include outdoor sightseeing and walking tours.
+- If snowy, include snow-safe indoor or appropriate outdoor experiences.
 
 Return ONLY JSON:
 

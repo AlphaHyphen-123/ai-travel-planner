@@ -193,12 +193,19 @@ function TripDetails() {
               <div className="flex flex-wrap gap-4 text-sm text-slate-500 font-medium">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="w-4 h-4 text-slate-400" />
-                  {trip.days} Days
+                  {trip.startDate ? new Date(trip.startDate).toLocaleDateString() : `${trip.days} Days`}
                 </div>
+                {trip.startDate && (
+                   <div className="flex items-center gap-1.5">
+                   <RefreshCw className="w-4 h-4 text-slate-400" />
+                   {trip.days} Days
+                 </div>
+                )}
                 <div className="flex items-center gap-1.5">
                   <Wallet className="w-4 h-4 text-slate-400" />
                   {trip.budgetType ? trip.budgetType.charAt(0).toUpperCase() + trip.budgetType.slice(1) : "Standard"} Budget
                 </div>
+
               </div>
             </div>
 

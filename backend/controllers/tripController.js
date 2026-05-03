@@ -2,11 +2,20 @@ const Trip = require("../models/Trip");
 const generateItinerary = require("../utils/generateItinerary");
 const calculateBudget = require("../utils/calculateBudget");
 const getHotelSuggestions = require("../utils/hotelSuggestions");
+const getWeatherForecast = require("../utils/weather");
+
 
 // Create Trip
 exports.createTrip = async (req, res) => {
   try {
-    const { destination, days, budgetType, interests } = req.body;
+    const { destination, days, budgetType, interests, startDate } = req.body;
+
+    // 🌤️ Weather logic
+    const weatherData = await getWeatherForecast(destination);
+    let weatherSummary = "";
+    weatherData.forEach((day, index) => {
+      weatherSummary += `Day ${index + 1}: ${day.day.condition.text}\n`;
+    });
 
     // 🔥 AI call
     const aiResponse = await generateItinerary({
@@ -14,7 +23,9 @@ exports.createTrip = async (req, res) => {
       days,
       interests,
       budgetType,
+      weatherSummary,
     });
+
 
     // =========================
     // ✅ FIX 1: SAFE ITINERARY
@@ -80,7 +91,9 @@ exports.createTrip = async (req, res) => {
     const trip = await Trip.create({
       user: req.user.id,
       destination,
+      startDate,
       days,
+
       budgetType,
       interests,
       itinerary,

@@ -52,9 +52,11 @@ function CreateTrip() {
   // ✅ FIXED — interests removed from form state (kept as array in selectedInterests)
   const [form, setForm] = useState({
     destination: "",
+    startDate: "",
     days: "",
     budgetType: "",
   });
+
 
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -104,8 +106,11 @@ function CreateTrip() {
 
     if (!form.destination.trim()) e.destination = "Destination is required";
 
+    if (!form.startDate) e.startDate = "Start date is required";
+
     if (!form.days || Number(form.days) < 1 || Number(form.days) > 15)
       e.days = "Enter 1–15 days";
+
 
     if (!form.budgetType) e.budgetType = "Please select a budget";
 
@@ -127,7 +132,9 @@ function CreateTrip() {
 
       const payload = {
         destination: form.destination.trim(),
+        startDate: form.startDate,
         days: Number(form.days),
+
 
         // ✅ LLM friendly — low / medium / high
         budgetType: form.budgetType.toLowerCase(),
@@ -303,6 +310,40 @@ function CreateTrip() {
                     </p>
                   )}
                 </div>
+
+                {/* Start Date */}
+                <div>
+                  <label
+                    htmlFor="startDate"
+                    className="flex items-center gap-1.5 text-sm font-semibold text-slate-700 mb-1.5"
+                  >
+                    <Calendar className="w-4 h-4 text-indigo-500" />
+                    Trip Start Date
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      id="startDate"
+                      name="startDate"
+                      type="date"
+                      value={form.startDate}
+                      onChange={handleChange}
+                      className={`w-full pl-10 pr-4 py-3 text-sm bg-white border rounded-xl focus:outline-none focus:ring-4 transition-all ${
+                        errors.startDate
+                          ? "border-red-300 focus:ring-red-100 focus:border-red-400"
+                          : "border-slate-200 focus:ring-indigo-100 focus:border-indigo-400 hover:border-slate-300"
+                      }`}
+                    />
+                  </div>
+                  {errors.startDate ? (
+                    <p className="text-xs text-red-500 mt-1.5">{errors.startDate}</p>
+                  ) : (
+                    <p className="text-xs text-slate-400 mt-1.5">
+                      When does your adventure begin?
+                    </p>
+                  )}
+                </div>
+
 
                 {/* Days + Budget grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

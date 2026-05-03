@@ -12,6 +12,11 @@ const tripSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    
+    startDate: {
+      type: String,
+    },
+
 
     days: {
       type: Number,
