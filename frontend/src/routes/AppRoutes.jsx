@@ -11,15 +11,8 @@ import PublicRoute from "./PublicRoute";
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public Home Page - Redirect to dashboard if already logged in */}
-      <Route 
-        path="/" 
-        element={
-          <PublicRoute>
-            <Home />
-          </PublicRoute>
-        } 
-      />
+      {/* Public Home Page */}
+      <Route path="/" element={<Home />} />
 
       {/* Auth Routes - Redirect to dashboard if already logged in */}
       <Route
