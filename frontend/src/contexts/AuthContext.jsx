@@ -9,8 +9,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("lastActivity");
+    localStorage.clear();
     setUser(null);
     window.location.href = "/login";
   };
@@ -18,7 +17,7 @@ export function AuthProvider({ children }) {
   const login = async (token) => {
     localStorage.setItem("token", token);
     localStorage.setItem("lastActivity", Date.now().toString());
-    
+
     // 1. Set initial user immediately from token to prevent redirects
     const decoded = jwtDecode(token);
     setUser({ token, ...decoded });
