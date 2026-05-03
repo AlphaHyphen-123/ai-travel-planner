@@ -9,12 +9,14 @@ const tripRoutes = require("./routes/tripRoutes");
 
 const app = express();
 
-// ✅ FIXED CORS - Allowing all origins for easier deployment
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+// ✅ SECURED CORS - Only allowing production frontend
+app.use(
+  cors({
+    origin:
+      "https://ai-travel-planner-pve7-iz6jea4wu-shivamsen9644-5146s-projects.vercel.app",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
