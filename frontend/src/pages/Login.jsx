@@ -32,7 +32,7 @@ function Login() {
         email: form.email.trim().toLowerCase(),
       };
       const res = await loginUser(normalizedForm);
-      login(res.token);
+      await login(res.token);
       navigate("/dashboard");
     } catch (err) {
       setError(

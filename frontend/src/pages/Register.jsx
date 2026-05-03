@@ -35,7 +35,7 @@ function Register() {
         name: form.name?.trim()
       };
       const res = await registerUser(normalizedForm);
-      login(res.token);
+      await login(res.token);
       navigate("/dashboard");
     } catch (err) {
       setError(
