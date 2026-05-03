@@ -16,17 +16,20 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (token) => {
-    setLoading(true);
     localStorage.setItem("token", token);
     localStorage.setItem("lastActivity", Date.now().toString());
+    
+    // 1. Set initial user immediately from token to prevent redirects
+    const decoded = jwtDecode(token);
+    setUser({ token, ...decoded });
+    setLoading(false);
+
+    // 2. Fetch fresh profile data in background or foreground
     try {
       const userData = await getUserProfile();
       setUser({ token, ...userData });
     } catch (error) {
-      const decoded = jwtDecode(token);
-      setUser({ token, ...decoded });
-    } finally {
-      setLoading(false);
+      console.error("Failed to fetch user profile:", error);
     }
   };
 
