@@ -12,11 +12,14 @@ const app = express();
 // ✅ SECURED CORS - Only allowing production frontend
 app.use(
   cors({
-    origin:
-      "https://ai-travel-planner-pve7-iz6jea4wu-shivamsen9644-5146s-projects.vercel.app",
+    origin: [
+      "https://ai-travel-planner-bu3x.vercel.app",
+      "https://ai-travel-planner-bu3x-shivamsen9644-5146s-projects.vercel.app",
+    ],
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 

@@ -1,6 +1,7 @@
-//import { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-//import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
+
 
 import {
   Plane,
@@ -19,7 +20,8 @@ import {
 
 function Home() {
   const navigate = useNavigate();
-  // const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+
 
 
   const features = [
@@ -77,14 +79,28 @@ function Home() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                if (user) {
+                  navigate("/dashboard");
+                } else {
+                  navigate("/login");
+                }
+              }}
+
 
               className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-indigo-600 transition"
             >
               Login
             </button>
             <button
-              onClick={() => navigate("/register")}
+              onClick={() => {
+                if (user) {
+                  navigate("/dashboard");
+                } else {
+                  navigate("/register");
+                }
+              }}
+
 
               className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-sky-500 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
