@@ -22,9 +22,9 @@ function Register() {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setLoading(true);
 
@@ -32,11 +32,13 @@ function Register() {
       const normalizedForm = {
         ...form,
         email: form.email.trim().toLowerCase(),
-        name: form.name?.trim()
+        name: form.name?.trim(),
       };
-      const res = await registerUser(normalizedForm);
-      await login(res.token);
+
+      await registerUser(normalizedForm);
+
       navigate("/login");
+
     } catch (err) {
       setError(
         err.response?.data?.message ||
