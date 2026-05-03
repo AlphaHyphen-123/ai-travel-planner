@@ -76,18 +76,20 @@ function Dashboard() {
           backgroundPosition: 'center' 
         }}
       >
-        {/* Semi-transparent overlay for readability */}
-        <div className="absolute inset-0 bg-white/90 backdrop-blur-[2px] z-0"></div>
+        {/* Dark semi-transparent overlay for premium look and image visibility */}
+        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px] z-0"></div>
+
 
         <div className="relative z-10 flex flex-col h-full">
 
         {/* Logo */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-100">
-          <img src={logo} alt="logo" className="w-10 h-10 rounded-lg shadow-sm" />
-          <span className="text-lg font-bold tracking-tight">
-            Travel<span className="text-indigo-600">AI</span>
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
+          <img src={logo} alt="logo" className="w-10 h-10 rounded-lg shadow-md" />
+          <span className="text-lg font-bold tracking-tight text-white">
+            Travel<span className="text-indigo-400">AI</span>
           </span>
         </div>
+
 
         {/* Nav */}
         <nav className="flex-1 px-4 py-6 space-y-1">
@@ -100,9 +102,10 @@ function Dashboard() {
                 onClick={() => navigate(item.path)}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-indigo-50 text-indigo-700 shadow-sm"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    ? "bg-white/20 text-white shadow-sm backdrop-blur-md"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`}
+
               >
                 <Icon className="w-4.5 h-4.5" />
                 {item.label}
@@ -112,15 +115,16 @@ function Dashboard() {
         </nav>
 
         {/* Logout */}
-        <div className="px-4 py-4 border-t border-slate-100">
+        <div className="px-4 py-4 border-t border-white/10">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all"
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-white/70 hover:bg-red-500/20 hover:text-red-400 transition-all"
           >
             <LogOut className="w-4.5 h-4.5" />
             Logout
           </button>
         </div>
+
         </div>
       </aside>
 
