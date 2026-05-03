@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import logo from "../assets/logo.webp";
 
 
 import {
@@ -63,9 +64,7 @@ function Home() {
       <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60">
         <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-8 py-4">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-sky-500 flex items-center justify-center shadow-md">
-              <Plane className="w-5 h-5 text-white" />
-            </div>
+            <img src={logo} alt="Logo" className="w-9 h-9 rounded-xl shadow-md object-cover" />
             <span className="text-lg font-bold tracking-tight text-slate-900">
               Travel<span className="text-indigo-600">AI</span>
             </span>
@@ -435,9 +434,7 @@ function Home() {
       <footer className="border-t border-slate-200 bg-white/60 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-sky-500 flex items-center justify-center">
-              <Plane className="w-4 h-4 text-white" />
-            </div>
+            <img src={logo} alt="Logo" className="w-8 h-8 rounded-lg shadow-sm object-cover" />
             <span className="font-bold text-slate-900">
               Travel<span className="text-indigo-600">AI</span>
             </span>
