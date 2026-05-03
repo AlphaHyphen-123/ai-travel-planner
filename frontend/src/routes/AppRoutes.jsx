@@ -11,24 +11,31 @@ import PublicRoute from "./PublicRoute";
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public Home Page */}
-      <Route path="/" element={<Home />} />
+      {/* Public Home Page - Redirect to dashboard if already logged in */}
+      <Route 
+        path="/" 
+        element={
+          <PublicRoute>
+            <Home />
+          </PublicRoute>
+        } 
+      />
 
       {/* Auth Routes - Redirect to dashboard if already logged in */}
       <Route
         path="/login"
         element={
-          // <PublicRoute>
+          <PublicRoute>
             <Login />
-          // </PublicRoute>
+          </PublicRoute>
         }
       />
       <Route
         path="/register"
         element={
-          // <PublicRoute>
+          <PublicRoute>
             <Register />
-          // </PublicRoute>
+          </PublicRoute>
         }
       />
 
