@@ -13,12 +13,11 @@ function PublicRoute({ children }) {
     );
   }
 
-  // If user is already authenticated, redirect to dashboard
+  // If already logged in → dashboard
   if (user) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/dashboard" replace />;
   }
 
-  // Otherwise, allow access to public routes (Login/Register)
   return children;
 }
 

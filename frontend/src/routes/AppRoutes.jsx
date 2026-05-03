@@ -1,20 +1,23 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import CreateTrip from "../pages/CreateTrip";
 import TripDetails from "../pages/TripDetails";
+
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public Home Page */}
+
+      {/* HOME PAGE */}
       <Route path="/" element={<Home />} />
 
-      {/* Auth Routes - Redirect to dashboard if already logged in */}
+      {/* PUBLIC ROUTES */}
       <Route
         path="/login"
         element={
@@ -23,6 +26,7 @@ function AppRoutes() {
           </PublicRoute>
         }
       />
+
       <Route
         path="/register"
         element={
@@ -32,7 +36,7 @@ function AppRoutes() {
         }
       />
 
-      {/* Protected Routes - Redirect to home if not logged in */}
+      {/* PRIVATE ROUTES */}
       <Route
         path="/dashboard"
         element={
@@ -50,7 +54,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
-      
+
       <Route
         path="/trip/:id"
         element={
@@ -60,7 +64,7 @@ function AppRoutes() {
         }
       />
 
-      {/* Catch-all: Redirect to Home */}
+      {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
