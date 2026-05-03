@@ -18,17 +18,17 @@ function AppRoutes() {
       <Route
         path="/login"
         element={
-          <PublicRoute>
+          // <PublicRoute>
             <Login />
-          </PublicRoute>
+          // </PublicRoute>
         }
       />
       <Route
         path="/register"
         element={
-          <PublicRoute>
+          // <PublicRoute>
             <Register />
-          </PublicRoute>
+          // </PublicRoute>
         }
       />
 
