@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+
 import {
   Plane,
   Sparkles,
@@ -16,6 +19,8 @@ import {
 
 function Home() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
 
   const features = [
     {
@@ -72,13 +77,27 @@ function Home() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                if (user) {
+                  navigate("/dashboard");
+                } else {
+                  navigate("/login");
+                }
+              }}
+
               className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-indigo-600 transition"
             >
               Login
             </button>
             <button
-              onClick={() => navigate("/register")}
+              onClick={() => {
+                if (user) {
+                  navigate("/dashboard");
+                } else {
+                  navigate("/register");
+                }
+              }}
+
               className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-sky-500 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               Get Started
@@ -115,14 +134,28 @@ function Home() {
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => navigate("/register")}
+                onClick={() => {
+                  if (user) {
+                    navigate("/dashboard");
+                  } else {
+                    navigate("/register");
+                  }
+                }}
+
                 className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-sky-500 hover:from-indigo-500 hover:to-sky-400 shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 transform hover:-translate-y-0.5 transition-all"
               >
                 Start Planning Free
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => {
+                  if (user) {
+                    navigate("/dashboard");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-slate-700 bg-white border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 shadow-sm transition-all"
               >
                 I already have an account
@@ -351,14 +384,28 @@ function Home() {
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => navigate("/register")}
+                onClick={() => {
+                  if (user) {
+                    navigate("/dashboard");
+                  } else {
+                    navigate("/register");
+                  }
+                }}
+
                 className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-indigo-700 bg-white hover:bg-slate-50 shadow-xl transform hover:-translate-y-0.5 transition-all"
               >
                 Create Free Account
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => {
+                  if (user) {
+                    navigate("/dashboard");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 transition-all"
               >
                 Login
