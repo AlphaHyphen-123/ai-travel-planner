@@ -36,6 +36,11 @@ export const loginUser = async (formData) => {
   return data;
 };
 
+export const getUserProfile = async () => {
+  const { data } = await API.get("/auth/me");
+  return data;
+};
+
 // ✈️ Trip APIs
 export const createTrip = async (formData) => {
   const { data } = await API.post("/trips", formData);

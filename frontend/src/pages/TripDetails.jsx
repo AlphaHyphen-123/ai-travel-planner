@@ -28,6 +28,17 @@ function TripDetails() {
   const [editingDay, setEditingDay] = useState(null);
   const [editContent, setEditContent] = useState("");
   const [regenLoading, setRegenLoading] = useState(null);
+  const [currency, setCurrency] = useState("USD");
+
+  const USD_TO_INR = 83;
+
+  const formatCurrency = (amount) => {
+    if (currency === "INR") {
+      return "₹" + (amount * USD_TO_INR).toLocaleString("en-IN");
+    } else {
+      return "$" + amount.toLocaleString("en-US");
+    }
+  };
 
   useEffect(() => {
     fetchTrip();
@@ -325,33 +336,51 @@ function TripDetails() {
             {/* Budget Breakdown */}
             {trip.estimatedBudget && (
               <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <Wallet className="w-5 h-5 text-indigo-500" />
-                  Estimated Budget
-                </h3>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="font-bold text-slate-900 flex items-center gap-2">
+                    <Wallet className="w-5 h-5 text-indigo-500" />
+                    Estimated Budget
+                  </h3>
+
+                  {/* Realistic Toggle Button */}
+                  <div 
+                    onClick={() => setCurrency(currency === "USD" ? "INR" : "USD")}
+                    className="relative w-24 h-8 bg-slate-100 rounded-full p-1 cursor-pointer flex items-center border border-slate-200"
+                  >
+                    <div 
+                      className={`absolute w-11 h-6 bg-white rounded-full shadow-sm transition-all duration-300 transform ${
+                        currency === "INR" ? "translate-x-11" : "translate-x-0"
+                      }`}
+                    />
+                    <div className="relative flex w-full justify-between px-2 text-[10px] font-bold z-10 select-none">
+                      <span className={currency === "USD" ? "text-indigo-600" : "text-slate-400"}>USD</span>
+                      <span className={currency === "INR" ? "text-indigo-600" : "text-slate-400"}>INR</span>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Flights</span>
-                    <span>${trip.estimatedBudget.flights}</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.flights)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Accommodation</span>
-                    <span>${trip.estimatedBudget.accommodation}</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.accommodation)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Food</span>
-                    <span>${trip.estimatedBudget.food}</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.food)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Activities</span>
-                    <span>${trip.estimatedBudget.activities}</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.activities)}</span>
                   </div>
 
                   <div className="pt-3 border-t mt-2 flex justify-between font-bold">
                     <span>Total</span>
-                    <span className="text-indigo-600">
-                      ${trip.estimatedBudget.total}
+                    <span className="text-indigo-600 transition-all duration-300">
+                      {formatCurrency(trip.estimatedBudget.total)}
                     </span>
                   </div>
                 </div>

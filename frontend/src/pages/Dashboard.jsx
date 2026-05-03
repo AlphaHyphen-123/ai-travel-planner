@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import logo from "../assets/logo.webp";
 import { getTrips } from "../services/api";
 import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -31,6 +32,8 @@ function Dashboard() {
     { id: 3, text: "Reminder: Your Bali trip starts in 3 days!", type: "info" },
   ]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const { user, logout } = useContext(AuthContext);
 
   useEffect(() => {
     fetchTrips();
@@ -48,8 +51,7 @@ function Dashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+    logout();
   };
 
   const filteredTrips = trips.filter((t) =>
@@ -186,8 +188,33 @@ function Dashboard() {
                 </div>
               )}
 
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-sky-500 flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                U
+              <div className="relative">
+                <div 
+                  onClick={() => setShowProfile(!showProfile)}
+                  className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-sky-500 flex items-center justify-center text-white font-semibold text-sm shadow-md cursor-pointer hover:scale-105 transition-transform"
+                >
+                  {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </div>
+
+                {/* Profile Dropdown */}
+                {showProfile && (
+                  <div className="absolute right-0 top-full mt-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+                      <p className="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">User Profile</p>
+                      <h3 className="font-bold text-slate-900 text-sm truncate">{user?.name || "User Name"}</h3>
+                      <p className="text-xs text-slate-500 truncate">{user?.email || "user@example.com"}</p>
+                    </div>
+                    <div className="p-2">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

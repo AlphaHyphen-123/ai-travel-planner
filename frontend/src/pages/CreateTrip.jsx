@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logo from "../assets/logo.webp";
 import { createTrip } from "../services/api";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -21,6 +21,10 @@ import {
   Music,
   ShoppingBag,
   Waves,
+  Brain,
+  Map,
+  Hotel,
+  Compass,
 } from "lucide-react";
 
 const INTEREST_OPTIONS = [
@@ -34,6 +38,16 @@ const INTEREST_OPTIONS = [
   { label: "Beaches", icon: Waves },
 ];
 
+// 🆕 Loading steps for the dynamic overlay
+const LOADING_STEPS = [
+  { icon: Brain, title: "Analyzing your preferences", desc: "Understanding your vibe & budget..." },
+  { icon: Compass, title: "Scouting top destinations", desc: "Finding hidden gems just for you..." },
+  { icon: Map, title: "Crafting day-wise itinerary", desc: "Optimizing your perfect route..." },
+  { icon: Hotel, title: "Picking the best stays", desc: "Matching hotels to your budget..." },
+  { icon: Wallet, title: "Calculating budget breakdown", desc: "Every dollar, accounted for..." },
+  { icon: Sparkles, title: "Adding final touches", desc: "Making it truly magical..." },
+];
+
 function CreateTrip() {
   // ✅ FIXED — interests removed from form state (kept as array in selectedInterests)
   const [form, setForm] = useState({
@@ -45,9 +59,22 @@ function CreateTrip() {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [loadingStep, setLoadingStep] = useState(0); // 🆕
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 🆕 Cycle through loading steps while loading
+  useEffect(() => {
+    if (!loading) {
+      setLoadingStep(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingStep((prev) => (prev + 1) % LOADING_STEPS.length);
+    }, 1800);
+    return () => clearInterval(interval);
+  }, [loading]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -416,6 +443,148 @@ function CreateTrip() {
           </div>
         </div>
       </main>
+
+      {/* ============================================================= */}
+      {/* 🆕 DYNAMIC AI LOADING OVERLAY                                  */}
+      {/* ============================================================= */}
+      {loading && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden">
+          {/* Animated gradient backdrop */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950 to-sky-950">
+            <div className="absolute inset-0 opacity-70">
+              <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/40 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-sky-500/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-violet-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }}></div>
+            </div>
+          </div>
+
+          {/* Flying plane across the screen */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div
+              className="absolute top-1/3 text-white/30"
+              style={{ animation: "flyAcross 6s linear infinite" }}
+            >
+              <Plane className="w-10 h-10 -rotate-12" />
+            </div>
+          </div>
+
+          {/* Main Loading Card */}
+          <div className="relative w-full max-w-md bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-8 shadow-2xl animate-[fadeInUp_0.5s_ease]">
+            {/* Orbiting ring */}
+            <div className="relative mx-auto w-32 h-32 mb-6">
+              {/* Outer rotating ring */}
+              <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-indigo-400 border-r-sky-400 animate-spin"></div>
+              {/* Middle ring */}
+              <div
+                className="absolute inset-2 rounded-full border-2 border-transparent border-b-violet-400 border-l-cyan-400"
+                style={{ animation: "spin 2s linear infinite reverse" }}
+              ></div>
+              {/* Center icon */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 via-sky-500 to-violet-500 flex items-center justify-center shadow-2xl shadow-indigo-500/50">
+                  {(() => {
+                    const CurrentIcon = LOADING_STEPS[loadingStep].icon;
+                    return (
+                      <CurrentIcon
+                        key={loadingStep}
+                        className="w-9 h-9 text-white animate-[popIn_0.4s_ease]"
+                      />
+                    );
+                  })()}
+                </div>
+              </div>
+              {/* Orbiting dots */}
+              <div className="absolute inset-0 animate-spin" style={{ animationDuration: "3s" }}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-indigo-400 rounded-full shadow-lg shadow-indigo-400/70"></div>
+              </div>
+              <div className="absolute inset-0 animate-spin" style={{ animationDuration: "4s", animationDirection: "reverse" }}>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-sky-400 rounded-full shadow-lg shadow-sky-400/70"></div>
+              </div>
+            </div>
+
+            {/* Badge */}
+            <div className="flex justify-center mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-semibold backdrop-blur-sm">
+                <Sparkles className="w-3 h-3 text-sky-300 animate-pulse" />
+                AI is working its magic
+              </div>
+            </div>
+
+            {/* Dynamic step text */}
+            <div key={loadingStep} className="text-center animate-[fadeInUp_0.4s_ease] min-h-[70px]">
+              <h3 className="text-xl font-extrabold text-white tracking-tight">
+                {LOADING_STEPS[loadingStep].title}
+              </h3>
+              <p className="text-sm text-white/70 mt-1.5">
+                {LOADING_STEPS[loadingStep].desc}
+              </p>
+            </div>
+
+            {/* Progress dots */}
+            <div className="flex justify-center gap-1.5 mt-6">
+              {LOADING_STEPS.map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-1.5 rounded-full transition-all duration-500 ${
+                    i === loadingStep
+                      ? "w-8 bg-gradient-to-r from-indigo-400 to-sky-400 shadow-lg shadow-indigo-400/50"
+                      : i < loadingStep
+                      ? "w-1.5 bg-white/60"
+                      : "w-1.5 bg-white/20"
+                  }`}
+                ></div>
+              ))}
+            </div>
+
+            {/* Trip summary chips */}
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <p className="text-[10px] uppercase tracking-widest text-white/50 font-semibold text-center mb-3">
+                Generating trip for
+              </p>
+              <div className="flex flex-wrap gap-1.5 justify-center">
+                {form.destination && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium">
+                    <MapPin className="w-3 h-3 text-indigo-300" />
+                    {form.destination}
+                  </span>
+                )}
+                {form.days && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium">
+                    <Calendar className="w-3 h-3 text-sky-300" />
+                    {form.days} days
+                  </span>
+                )}
+                {form.budgetType && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium">
+                    <Wallet className="w-3 h-3 text-emerald-300" />
+                    {form.budgetType}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <p className="text-center text-[10px] text-white/40 mt-5 tracking-wider">
+              This usually takes 10–20 seconds ✈️
+            </p>
+          </div>
+
+          {/* Keyframes */}
+          <style>{`
+            @keyframes fadeInUp {
+              from { opacity: 0; transform: translateY(15px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes popIn {
+              0% { opacity: 0; transform: scale(0.5); }
+              100% { opacity: 1; transform: scale(1); }
+            }
+            @keyframes flyAcross {
+              from { transform: translateX(-20vw); }
+              to { transform: translateX(120vw); }
+            }
+          `}</style>
+        </div>
+      )}
     </div>
   );
 }

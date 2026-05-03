@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 // Register
 exports.registerUser = async (req, res) => {
   try {
-    // console.log("BODY:", req.body);
     let { name, email, password } = req.body;
     email = email.trim().toLowerCase();
 
@@ -23,7 +22,7 @@ exports.registerUser = async (req, res) => {
     });
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, name: user.name, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -37,6 +36,19 @@ exports.registerUser = async (req, res) => {
         email: user.email,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get User Profile (Me)
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -60,7 +72,7 @@ exports.loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, name: user.name, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );

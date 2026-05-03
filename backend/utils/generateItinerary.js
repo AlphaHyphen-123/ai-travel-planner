@@ -16,9 +16,10 @@ const generateItinerary = async ({ destination, days, interests, budgetType }) =
 Create a ${days}-day travel itinerary for ${destination}.
 
 Budget: ${budgetType}
-Interests: ${interests.join(", ")}
+Interests: ${Array.isArray(interests) ? interests.join(", ") : interests}
 
 Return ONLY JSON:
+
 {
   "itinerary": [
     {
@@ -27,11 +28,18 @@ Return ONLY JSON:
     }
   ],
   "budget": {
-    "total": "₹20000",
-    "daily": "₹2000"
+    "flightCost": 0,
+    "hotelPerDay": 0,
+    "foodPerDay": 0,
+    "activityPerDay": 0
   },
   "hotels": ["Hotel A", "Hotel B"]
 }
+
+IMPORTANT:
+- All values must be NUMBERS only
+- No currency symbols
+- No text explanation
 `;
 
     const completion = await client.chat.completions.create({

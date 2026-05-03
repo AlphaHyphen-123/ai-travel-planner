@@ -28,9 +28,6 @@ exports.createTrip = async (req, res) => {
           },
         ];
 
-    // =========================
-    // ✅ FIX 2: NORMALIZE BUDGET
-    // =========================
     const cleanNumber = (val) => {
       if (!val) return 0;
       return Number(val.toString().replace(/[^0-9]/g, ""));
@@ -39,21 +36,32 @@ exports.createTrip = async (req, res) => {
     let budget;
 
     if (aiResponse.budget && typeof aiResponse.budget === "object") {
-      const total = cleanNumber(aiResponse.budget.total);
+      const flightCost = cleanNumber(aiResponse.budget.flightCost);
+      const hotelPerDay = cleanNumber(aiResponse.budget.hotelPerDay);
+      const foodPerDay = cleanNumber(aiResponse.budget.foodPerDay);
+      const activityPerDay = cleanNumber(aiResponse.budget.activityPerDay);
 
-      if (total > 0) {
-        // 🔥 SMART DISTRIBUTION
-        budget = {
-          flights: Math.floor(total * 0.4),
-          accommodation: Math.floor(total * 0.3),
-          food: Math.floor(total * 0.2),
-          activities: Math.floor(total * 0.1),
-          total: total,
-          dailyCost: Math.floor(total / days),
-        };
-      } else {
+      const accommodation = hotelPerDay * days;
+      const food = foodPerDay * days;
+      const activities = activityPerDay * days;
+
+      const total =
+        flightCost + accommodation + food + activities;
+
+      budget = {
+        flights: flightCost,
+        accommodation,
+        food,
+        activities,
+        total,
+        dailyCost: Math.floor(total / days),
+      };
+
+      // 🔥 fallback if LLM fails
+      if (!total || total === 0) {
         budget = calculateBudget(days, budgetType);
       }
+
     } else {
       budget = calculateBudget(days, budgetType);
     }

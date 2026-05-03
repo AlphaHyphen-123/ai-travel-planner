@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { getUserProfile } from "../services/api";
 
 export const AuthContext = createContext();
 
@@ -14,11 +15,16 @@ export function AuthProvider({ children }) {
     window.location.href = "/";
   };
 
-  const login = (token) => {
+  const login = async (token) => {
     localStorage.setItem("token", token);
     localStorage.setItem("lastActivity", Date.now().toString());
-    const decoded = jwtDecode(token);
-    setUser({ token, ...decoded });
+    try {
+      const userData = await getUserProfile();
+      setUser({ token, ...userData });
+    } catch (error) {
+      const decoded = jwtDecode(token);
+      setUser({ token, ...decoded });
+    }
   };
 
   useEffect(() => {
@@ -36,7 +42,15 @@ export function AuthProvider({ children }) {
           if (isTokenExpired || isInactive) {
             logout();
           } else {
-            setUser({ token, ...decoded });
+            // Fetch fresh data from DB
+            getUserProfile()
+              .then((userData) => {
+                setUser({ token, ...userData });
+              })
+              .catch(() => {
+                const decoded = jwtDecode(token);
+                setUser({ token, ...decoded });
+              });
             localStorage.setItem("lastActivity", Date.now().toString());
           }
         } catch (error) {
