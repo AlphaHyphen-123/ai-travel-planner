@@ -1,5 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import logo from "../assets/logo.webp";
+import bgimg from "../assets/bgimg.jpg";
+
 import { getTrips } from "../services/api";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
@@ -66,7 +68,19 @@ function Dashboard() {
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-800">
       {/* ===================== SIDEBAR ===================== */}
-      <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 shadow-sm">
+      <aside 
+        className="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 shadow-sm relative overflow-hidden"
+        style={{ 
+          backgroundImage: `url(${bgimg})`, 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center' 
+        }}
+      >
+        {/* Semi-transparent overlay for readability */}
+        <div className="absolute inset-0 bg-white/90 backdrop-blur-[2px] z-0"></div>
+
+        <div className="relative z-10 flex flex-col h-full">
+
         {/* Logo */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-100">
           <img src={logo} alt="logo" className="w-10 h-10 rounded-lg shadow-sm" />
@@ -107,7 +121,9 @@ function Dashboard() {
             Logout
           </button>
         </div>
+        </div>
       </aside>
+
 
       {/* ===================== MAIN ===================== */}
       <div className="flex-1 flex flex-col min-w-0">
