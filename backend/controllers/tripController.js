@@ -39,45 +39,7 @@ exports.createTrip = async (req, res) => {
           },
         ];
 
-    const cleanNumber = (val) => {
-      if (!val) return 0;
-      return Number(val.toString().replace(/[^0-9]/g, ""));
-    };
-
-    let budget;
-    const daily = aiResponse.dailyCosts || {};
-
-    const hotelPerDay = cleanNumber(daily.hotelPerDay);
-    const foodPerDay = cleanNumber(daily.foodPerDay);
-    const activityPerDay = cleanNumber(daily.activityPerDay);
-    const transportPerDay = cleanNumber(daily.transportPerDay);
-
-    const totalHotel = hotelPerDay * days;
-    const totalFood = foodPerDay * days;
-    const totalActivities = activityPerDay * days;
-    const totalTransport = transportPerDay * days;
-
-    const total = totalHotel + totalFood + totalActivities + totalTransport;
-
-    if (total > 0) {
-      budget = {
-        hotel: totalHotel,
-        food: totalFood,
-        activities: totalActivities,
-        transport: totalTransport,
-        total,
-      };
-    } else {
-      // Fallback to legacy calculator if AI fails
-      const fallback = calculateBudget(days, budgetType);
-      budget = {
-        hotel: fallback.accommodation,
-        food: fallback.food,
-        activities: fallback.activities,
-        transport: Math.floor(fallback.total * 0.1), // Estimate transport as 10%
-        total: fallback.total,
-      };
-    }
+    const budget = calculateBudget(destination, days, budgetType);
 
 
     // =========================

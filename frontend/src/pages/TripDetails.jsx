@@ -39,10 +39,11 @@ function TripDetails() {
   const USD_TO_INR = 83;
 
   const formatCurrency = (amount) => {
+    if (amount === undefined || amount === null) amount = 0;
     if (currency === "INR") {
-      return "₹" + (amount * USD_TO_INR).toLocaleString("en-IN");
+      return "₹" + amount.toLocaleString("en-IN");
     } else {
-      return "$" + amount.toLocaleString("en-US");
+      return "$" + Math.round(amount / USD_TO_INR).toLocaleString("en-US");
     }
   };
 
@@ -375,7 +376,7 @@ function TripDetails() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Hotels</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.hotel)}</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.accommodation || trip.estimatedBudget.hotel)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Food</span>
@@ -386,8 +387,8 @@ function TripDetails() {
                     <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.activities)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Transport</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.transport)}</span>
+                    <span>Flights / Transport</span>
+                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.flights || trip.estimatedBudget.transport)}</span>
                   </div>
 
                   <div className="pt-3 border-t mt-2 flex justify-between font-bold">
