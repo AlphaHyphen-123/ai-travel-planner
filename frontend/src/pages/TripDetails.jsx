@@ -376,25 +376,33 @@ function TripDetails() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Hotels</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.accommodation || trip.estimatedBudget.hotel)}</span>
+                    <span className="transition-all duration-300">
+                      {formatCurrency(trip.estimatedBudget?.accommodation || 0)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Food</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.food)}</span>
+                    <span className="transition-all duration-300">
+                      {formatCurrency(trip.estimatedBudget?.food || 0)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Activities</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.activities)}</span>
+                    <span className="transition-all duration-300">
+                      {formatCurrency(trip.estimatedBudget?.activities || 0)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Flights / Transport</span>
-                    <span className="transition-all duration-300">{formatCurrency(trip.estimatedBudget.flights || trip.estimatedBudget.transport)}</span>
+                    <span className="transition-all duration-300">
+                      {formatCurrency(trip.estimatedBudget?.flights || 0)}
+                    </span>
                   </div>
 
                   <div className="pt-3 border-t mt-2 flex justify-between font-bold">
                     <span>Total</span>
                     <span className="text-indigo-600 transition-all duration-300">
-                      {formatCurrency(trip.estimatedBudget.total)}
+                      {formatCurrency(trip.estimatedBudget?.total || 0)}
                     </span>
                   </div>
                 </div>
