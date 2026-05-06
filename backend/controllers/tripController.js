@@ -40,6 +40,7 @@ exports.createTrip = async (req, res) => {
         ];
 
     const budget = calculateBudget(destination, days, budgetType);
+    console.log("BUDGET:", budget);
 
 
     // =========================

@@ -50,11 +50,14 @@ const tripSchema = new mongoose.Schema(
 
     // ✅ FIXED (STRUCTURED OBJECT)
     estimatedBudget: {
-      hotel: Number,
+      flights: Number,
+      accommodation: Number,
       food: Number,
       activities: Number,
-      transport: Number,
       total: Number,
+      dailyCost: Number,
+      hotel: Number,
+      transport: Number,
     },
 
     // ✅ NEW (SAVE FEATURE)
