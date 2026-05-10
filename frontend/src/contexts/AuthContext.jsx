@@ -36,7 +36,7 @@ export function AuthProvider({ children }) {
     const checkToken = () => {
       const token = localStorage.getItem("token");
       const lastActivity = localStorage.getItem("lastActivity");
-      const INACTIVITY_LIMIT = 10 * 60 * 1000;
+      const INACTIVITY_LIMIT = 15 * 60 * 1000;
 
       if (token) {
         try {
@@ -80,7 +80,7 @@ export function AuthProvider({ children }) {
       const token = localStorage.getItem("token");
       const lastActivity = localStorage.getItem("lastActivity");
       if (token && lastActivity) {
-        if (Date.now() - parseInt(lastActivity) > 10 * 60 * 1000) {
+        if (Date.now() - parseInt(lastActivity) > 15 * 60 * 1000) {
           logout();
         }
       }

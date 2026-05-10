@@ -23,11 +23,10 @@ Weather Forecast Context:
 ${weatherSummary || "No weather data available. Plan for typical seasonal weather."}
 
 Instructions:
-- Consider the travel distance and transportation difficulty from the starting location to the destination.
-- Ensure realistic travel flow on Day 1 (arrival) and the final day (departure).
-- If rainy, avoid outdoor activities. Suggest museums, cafes, shopping malls, aquariums for bad weather.
-- If sunny, include outdoor sightseeing and walking tours.
-- If snowy, include snow-safe indoor or appropriate outdoor experiences.
+- Keep activity descriptions EXTREMELY short (max 3-5 words).
+- Consider travel distance and realistic flow on arrival/departure days.
+- If rainy: indoor activities. If sunny: outdoor. If snowy: snow-safe.
+- Be fast and concise.
 
 Return ONLY JSON:
 
@@ -61,8 +60,8 @@ IMPORTANT:
         { role: "system", content: "You are a travel planner AI. Always return valid JSON only." },
         { role: "user", content: prompt }
       ],
-      temperature: 0.7,
-      max_tokens: 2000,
+      temperature: 0.6,
+      max_tokens: 800,
     });
 
     const text = completion.choices[0].message.content;

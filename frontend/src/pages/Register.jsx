@@ -13,6 +13,7 @@ function Register() {
   });
 
   const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
 
   //const { login } = useContext(AuthContext);
@@ -21,9 +22,20 @@ function Register() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+
+    if (name === "password") {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (value && !passwordRegex.test(value)) {
+        setPasswordError("Password must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character.");
+      } else {
+        setPasswordError("");
+      }
+    }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (passwordError) return;
 
     setError("");
     setLoading(true);
@@ -152,13 +164,18 @@ navigate("/login");
               onChange={handleChange}
               autoComplete="new-password"
               required
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
+                passwordError ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+              }`}
             />
+            {passwordError && (
+              <p className="text-xs text-red-500 mt-1">{passwordError}</p>
+            )}
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+              disabled={loading || !!passwordError}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Creating..." : "Register"}
             </button>

@@ -13,6 +13,11 @@ exports.registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character." });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -24,7 +29,7 @@ exports.registerUser = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, name: user.name, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "15m" }
     );
 
     res.status(201).json({
@@ -74,7 +79,7 @@ exports.loginUser = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, name: user.name, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "15m" }
     );
 
     res.json({
