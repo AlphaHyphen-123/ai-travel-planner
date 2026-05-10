@@ -195,7 +195,7 @@ function TripDetails() {
                 AI Generated Itinerary
               </div>
               <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-                Trip to {trip.destination}
+                Trip: {trip.startPlace ? `${trip.startPlace} → ${trip.destination}` : trip.destination}
               </h1>
               <div className="flex flex-wrap gap-4 text-sm text-slate-500 font-medium">
                 <div className="flex items-center gap-1.5">

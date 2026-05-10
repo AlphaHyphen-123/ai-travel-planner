@@ -1,18 +1,33 @@
-const calculateBudget = (destination, days, budgetType) => {
+const calculateBudget = (startPlace, destination, days, budgetType) => {
   const indianDestinations = [
     "delhi", "mumbai", "goa", "jaipur", "manali", 
     "shimla", "kerala", "agra", "bangalore"
   ];
   
-  const isIndia = indianDestinations.some(d => 
+  const destIsIndia = indianDestinations.some(d => 
     destination.toLowerCase().includes(d)
   );
+
+  const startIsIndia = startPlace ? indianDestinations.some(d => 
+    startPlace.toLowerCase().includes(d)
+  ) : destIsIndia; // fallback if startPlace somehow missing
 
   let flights, hotelPerDay, foodPerDay, activitiesPerDay;
 
   const type = budgetType ? budgetType.toLowerCase() : "medium";
 
-  if (isIndia) {
+  // Transportation Cost Logic
+  const isSamePlace = startPlace && destination.toLowerCase().trim() === startPlace.toLowerCase().trim();
+  const isDomestic = destIsIndia === startIsIndia;
+
+  let transportMultiplier = 1;
+  if (isSamePlace) {
+    transportMultiplier = 0.2; // very low transport cost
+  } else if (!isDomestic) {
+    transportMultiplier = 5; // high international cost
+  }
+
+  if (destIsIndia) {
     if (type === "low") {
       flights = 5000;
       hotelPerDay = 1000;
@@ -47,6 +62,8 @@ const calculateBudget = (destination, days, budgetType) => {
       activitiesPerDay = 2000;
     }
   }
+
+  flights = flights * transportMultiplier;
 
   const accommodation = hotelPerDay * days;
   const food = foodPerDay * days;

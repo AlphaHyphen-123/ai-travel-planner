@@ -8,7 +8,7 @@ const getWeatherForecast = require("../utils/weather");
 // Create Trip
 exports.createTrip = async (req, res) => {
   try {
-    const { destination, days, budgetType, interests, startDate } = req.body;
+    const { startPlace, destination, days, budgetType, interests, startDate } = req.body;
 
     // 🌤️ Weather logic
     const weatherData = await getWeatherForecast(destination);
@@ -19,6 +19,7 @@ exports.createTrip = async (req, res) => {
 
     // 🔥 AI call
     const aiResponse = await generateItinerary({
+      startPlace,
       destination,
       days,
       interests,
@@ -39,7 +40,7 @@ exports.createTrip = async (req, res) => {
           },
         ];
 
-    const budget = calculateBudget(destination, days, budgetType);
+    const budget = calculateBudget(startPlace, destination, days, budgetType);
     console.log("BUDGET:", budget);
 
 
@@ -56,6 +57,7 @@ exports.createTrip = async (req, res) => {
     // =========================
     const trip = await Trip.create({
       user: req.user.id,
+      startPlace,
       destination,
       startDate,
       days,

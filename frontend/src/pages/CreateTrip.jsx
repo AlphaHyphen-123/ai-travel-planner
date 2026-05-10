@@ -51,6 +51,7 @@ const LOADING_STEPS = [
 function CreateTrip() {
   // ✅ FIXED — interests removed from form state (kept as array in selectedInterests)
   const [form, setForm] = useState({
+    startPlace: "",
     destination: "",
     startDate: "",
     days: "",
@@ -104,6 +105,8 @@ function CreateTrip() {
   const validate = () => {
     const e = {};
 
+    if (!form.startPlace.trim()) e.startPlace = "Starting location is required";
+
     if (!form.destination.trim()) e.destination = "Destination is required";
 
     if (!form.startDate) e.startDate = "Start date is required";
@@ -131,6 +134,7 @@ function CreateTrip() {
       setLoading(true);
 
       const payload = {
+        startPlace: form.startPlace.trim(),
         destination: form.destination.trim(),
         startDate: form.startDate,
         days: Number(form.days),
@@ -278,6 +282,39 @@ function CreateTrip() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Start Place */}
+                <div>
+                  <label
+                    htmlFor="startPlace"
+                    className="flex items-center gap-1.5 text-sm font-semibold text-slate-700 mb-1.5"
+                  >
+                    <MapPin className="w-4 h-4 text-indigo-500" />
+                    Starting Location
+                  </label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      id="startPlace"
+                      name="startPlace"
+                      value={form.startPlace}
+                      onChange={handleChange}
+                      placeholder="Where are you travelling from? e.g. Delhi, Mumbai"
+                      className={`w-full pl-10 pr-4 py-3 text-sm bg-white border rounded-xl focus:outline-none focus:ring-4 transition-all ${
+                        errors.startPlace
+                          ? "border-red-300 focus:ring-red-100 focus:border-red-400"
+                          : "border-slate-200 focus:ring-indigo-100 focus:border-indigo-400 hover:border-slate-300"
+                      }`}
+                    />
+                  </div>
+                  {errors.startPlace ? (
+                    <p className="text-xs text-red-500 mt-1.5">{errors.startPlace}</p>
+                  ) : (
+                    <p className="text-xs text-slate-400 mt-1.5">
+                      Your starting city or country
+                    </p>
+                  )}
+                </div>
+
                 {/* Destination */}
                 <div>
                   <label

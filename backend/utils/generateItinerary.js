@@ -1,6 +1,6 @@
 const OpenAI = require("openai");
 
-const generateItinerary = async ({ destination, days, interests, budgetType, weatherSummary }) => {
+const generateItinerary = async ({ startPlace, destination, days, interests, budgetType, weatherSummary }) => {
   try {
     const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey) {
@@ -12,7 +12,9 @@ const generateItinerary = async ({ destination, days, interests, budgetType, wea
       apiKey: apiKey,
     });
     const prompt = `
-Create a ${days}-day travel itinerary for ${destination}.
+Create a ${days}-day travel itinerary.
+Starting location: ${startPlace}
+Destination: ${destination}
 
 Budget: ${budgetType}
 Interests: ${Array.isArray(interests) ? interests.join(", ") : interests}
@@ -21,6 +23,8 @@ Weather Forecast Context:
 ${weatherSummary || "No weather data available. Plan for typical seasonal weather."}
 
 Instructions:
+- Consider the travel distance and transportation difficulty from the starting location to the destination.
+- Ensure realistic travel flow on Day 1 (arrival) and the final day (departure).
 - If rainy, avoid outdoor activities. Suggest museums, cafes, shopping malls, aquariums for bad weather.
 - If sunny, include outdoor sightseeing and walking tours.
 - If snowy, include snow-safe indoor or appropriate outdoor experiences.

@@ -8,6 +8,11 @@ const tripSchema = new mongoose.Schema(
       required: true,
     },
 
+    startPlace: {
+      type: String,
+      required: true,
+    },
+
     destination: {
       type: String,
       required: true,
