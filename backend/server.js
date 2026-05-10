@@ -9,16 +9,31 @@ const tripRoutes = require("./routes/tripRoutes");
 
 const app = express();
 
-// ✅ SECURED CORS - Only allowing production frontend
-app.use(
-  cors({
-    origin: [
-      "https://ai-travel-planner-bu3x.vercel.app",
-      "https://ai-travel-planner-bu3x-shivamsen9644-5146s-projects.vercel.app",
-    ],
-    credentials: true,
-  })
-);
+// ✅ SECURED CORS - Production Ready
+const allowedOrigins = [
+  "http://localhost:5173", // For local development
+  "http://localhost:3000",
+  "https://ai-travel-planner-bu3x.vercel.app",
+  "https://ai-travel-planner-bu3x-shivamsen9644-5146s-projects.vercel.app",
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`Blocked by CORS: Origin ${origin} not allowed.`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"],
+  optionsSuccessStatus: 200, // For legacy browser support
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
 
 
 app.use(express.json());
